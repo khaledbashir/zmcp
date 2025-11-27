@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  web-search-mcp:
+    build: .
+    ports:
+      - "8020:8020"
+    env_file:
+      - .env
+    restart: unless-stopped
+    networks:
+      - mcp-network
+
+networks:
+  mcp-network:
+    driver: bridge
+```
+
+Now, let's create a sample `.env` file that you'll need to set up with your actual API key:

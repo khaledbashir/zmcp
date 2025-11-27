@@ -1,15 +1,21 @@
-FROM python:3.12.0
+FROM python:3.12-slim
 
 WORKDIR /app
 
+# Install uv for dependency management
+RUN pip install --no-cache-dir uv
+
+# Copy dependency files first for better caching
+COPY pyproject.toml uv.lock ./
+
+# Install dependencies
+RUN uv venv && uv pip install --no-dev -r uv.lock
+
+# Copy application code
 COPY . .
 
-# 安装uv和poetry
-# 如果是中国大陆用户，可以设置国内源
-# RUN pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
-RUN pip install --no-cache-dir uv \
-    && pip install --no-cache-dir poetry \
-    && uv venv
-    && source .venv/Scripts/activate  && poetry install  --no-root
+# Expose the port
+EXPOSE 8020
 
-CMD ["uv", "run", "web_search.py"]
+# Command to run the SSE server
+CMD ["uv", "run", "main.py", "--host", "0.0.0.0", "--port", "8020"]
