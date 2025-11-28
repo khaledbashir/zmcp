@@ -9,7 +9,7 @@ RUN pip install --no-cache-dir uv
 COPY pyproject.toml uv.lock ./
 
 # Install dependencies
-RUN uv venv && uv pip install --no-dev -r uv.lock
+RUN uv venv && uv sync
 
 # Copy application code
 COPY . .
@@ -18,4 +18,4 @@ COPY . .
 EXPOSE 8020
 
 # Command to run the SSE server
-CMD ["uv", "run", "main.py", "--host", "0.0.0.0", "--port", "8020"]
+CMD [".venv/bin/python", "main.py", "--host", "0.0.0.0", "--port", "8020"]
