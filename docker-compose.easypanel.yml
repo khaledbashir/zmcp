@@ -2,7 +2,9 @@ version: '3.8'
 
 services:
   web-search-mcp:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.easypanel
     container_name: zhipu-mcp-server
     ports:
       - "8020:8020"
